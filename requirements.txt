@@ -5,3 +5,5 @@ tabulate
 tqdm
 lifelines
 pandas
+sklearn
+torchvision

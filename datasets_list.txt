@@ -1,0 +1,2 @@
+prefix	dataset_type	data_dir
+"tcga"	"non_icb"	"/home/as892/data/xiaoman/tcga"

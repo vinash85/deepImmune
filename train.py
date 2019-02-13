@@ -271,7 +271,8 @@ if __name__ == '__main__':
     # torch.cuda.manual_seed(230)
 
     # Set the logger
-    utils.set_logger(os.path.join(args.model_dir, 'train.log'))
+    
+    utils.set_logger(os.path.join(os.getcwd(), 'train.log'))
 
     # Create the input data pipeline
     logging.info("Loading the datasets...")

@@ -1,0 +1,44 @@
+Using base prefix '/n/app/python/3.6.0'
+New python executable in /home/bk117/deepImmune/venv1/bin/python3.6
+Also creating executable in /home/bk117/deepImmune/venv1/bin/python
+Installing setuptools, pip, wheel...done.
+Collecting numpy (from -r requirements.txt (line 1))
+  Using cached https://files.pythonhosted.org/packages/f5/bf/4981bcbee43934f0adb8f764a1e70ab0ee5a448f6505bd04a87a2fda2a8b/numpy-1.16.1-cp36-cp36m-manylinux1_x86_64.whl
+Collecting Pillow (from -r requirements.txt (line 2))
+  Using cached https://files.pythonhosted.org/packages/85/5e/e91792f198bbc5a0d7d3055ad552bc4062942d27eaf75c3e2783cf64eae5/Pillow-5.4.1-cp36-cp36m-manylinux1_x86_64.whl
+Collecting torch>=0.3 (from -r requirements.txt (line 3))
+  Using cached https://files.pythonhosted.org/packages/31/ca/dd2c64f8ab5e7985c4af6e62da933849293906edcdb70dac679c93477733/torch-1.0.1.post2-cp36-cp36m-manylinux1_x86_64.whl
+Collecting tabulate (from -r requirements.txt (line 4))
+Collecting tqdm (from -r requirements.txt (line 5))
+  Using cached https://files.pythonhosted.org/packages/6c/4b/c38b5144cf167c4f52288517436ccafefe9dc01b8d1c190e18a6b154cd4a/tqdm-4.31.1-py2.py3-none-any.whl
+Collecting lifelines (from -r requirements.txt (line 6))
+  Using cached https://files.pythonhosted.org/packages/c4/96/32e630d81cb2503f4e652fb3b04d2b083efefa66e59c7664ffa7b86dbe10/lifelines-0.18.5-py3-none-any.whl
+Collecting pandas (from -r requirements.txt (line 7))
+  Using cached https://files.pythonhosted.org/packages/e6/de/a0d3defd8f338eaf53ef716e40ef6d6c277c35d50e09b586e170169cdf0d/pandas-0.24.1-cp36-cp36m-manylinux1_x86_64.whl
+Collecting sklearn (from -r requirements.txt (line 8))
+Collecting torchvision (from -r requirements.txt (line 9))
+  Using cached https://files.pythonhosted.org/packages/ca/0d/f00b2885711e08bd71242ebe7b96561e6f6d01fdb4b9dcf4d37e2e13c5e1/torchvision-0.2.1-py2.py3-none-any.whl
+Collecting bottleneck>=1.0 (from lifelines->-r requirements.txt (line 6))
+Collecting matplotlib<3.0,>=2.0 (from lifelines->-r requirements.txt (line 6))
+  Using cached https://files.pythonhosted.org/packages/9e/59/f235ab21bbe7b7c6570c4abf17ffb893071f4fa3b9cf557b09b60359ad9a/matplotlib-2.2.3-cp36-cp36m-manylinux1_x86_64.whl
+Collecting scipy>=1.0 (from lifelines->-r requirements.txt (line 6))
+  Using cached https://files.pythonhosted.org/packages/7f/5f/c48860704092933bf1c4c1574a8de1ffd16bf4fde8bab190d747598844b2/scipy-1.2.1-cp36-cp36m-manylinux1_x86_64.whl
+Collecting autograd>=1.2 (from lifelines->-r requirements.txt (line 6))
+Collecting python-dateutil>=2.5.0 (from pandas->-r requirements.txt (line 7))
+  Using cached https://files.pythonhosted.org/packages/41/17/c62faccbfbd163c7f57f3844689e3a78bae1f403648a6afb1d0866d87fbb/python_dateutil-2.8.0-py2.py3-none-any.whl
+Collecting pytz>=2011k (from pandas->-r requirements.txt (line 7))
+  Using cached https://files.pythonhosted.org/packages/61/28/1d3920e4d1d50b19bc5d24398a7cd85cc7b9a75a490570d5a30c57622d34/pytz-2018.9-py2.py3-none-any.whl
+Collecting scikit-learn (from sklearn->-r requirements.txt (line 8))
+  Using cached https://files.pythonhosted.org/packages/0d/3a/b92670f5c368c20329ecc4c255993fae7934564d485c3ed7ea7b8da7f741/scikit_learn-0.20.2-cp36-cp36m-manylinux1_x86_64.whl
+Collecting six (from torchvision->-r requirements.txt (line 9))
+  Using cached https://files.pythonhosted.org/packages/73/fb/00a976f728d0d1fecfe898238ce23f502a721c0ac0ecfedb80e0d88c64e9/six-1.12.0-py2.py3-none-any.whl
+Collecting pyparsing!=2.0.4,!=2.1.2,!=2.1.6,>=2.0.1 (from matplotlib<3.0,>=2.0->lifelines->-r requirements.txt (line 6))
+  Using cached https://files.pythonhosted.org/packages/de/0a/001be530836743d8be6c2d85069f46fecf84ac6c18c7f5fb8125ee11d854/pyparsing-2.3.1-py2.py3-none-any.whl
+Collecting cycler>=0.10 (from matplotlib<3.0,>=2.0->lifelines->-r requirements.txt (line 6))
+  Using cached https://files.pythonhosted.org/packages/f7/d2/e07d3ebb2bd7af696440ce7e754c59dd546ffe1bbe732c8ab68b9c834e61/cycler-0.10.0-py2.py3-none-any.whl
+Collecting kiwisolver>=1.0.1 (from matplotlib<3.0,>=2.0->lifelines->-r requirements.txt (line 6))
+  Using cached https://files.pythonhosted.org/packages/69/a7/88719d132b18300b4369fbffa741841cfd36d1e637e1990f27929945b538/kiwisolver-1.0.1-cp36-cp36m-manylinux1_x86_64.whl
+Collecting future>=0.15.2 (from autograd>=1.2->lifelines->-r requirements.txt (line 6))
+Requirement already satisfied: setuptools in ./venv1/lib/python3.6/site-packages (from kiwisolver>=1.0.1->matplotlib<3.0,>=2.0->lifelines->-r requirements.txt (line 6)) (40.8.0)
+Installing collected packages: numpy, Pillow, torch, tabulate, tqdm, bottleneck, six, pytz, python-dateutil, pyparsing, cycler, kiwisolver, matplotlib, scipy, pandas, future, autograd, lifelines, scikit-learn, sklearn, torchvision
+Successfully installed Pillow-5.4.1 autograd-1.2 bottleneck-1.2.1 cycler-0.10.0 future-0.17.1 kiwisolver-1.0.1 lifelines-0.18.5 matplotlib-2.2.3 numpy-1.16.1 pandas-0.24.1 pyparsing-2.3.1 python-dateutil-2.8.0 pytz-2018.9 scikit-learn-0.20.2 scipy-1.2.1 six-1.12.0 sklearn-0.0 tabulate-0.8.3 torch-1.0.1.post2 torchvision-0.2.1 tqdm-4.31.1
