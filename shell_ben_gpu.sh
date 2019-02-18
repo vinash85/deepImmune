@@ -10,12 +10,12 @@
 #SBATCH --mail-type=ALL                    # Type of email notification- BEGIN,END,FAIL,ALL
 #SBATCH --mail-user=kompa@fas.harvard.edu   # Email to which notifications will be sent
 
-./shell_ben_venv.sh
+./shell_ben_venv_2_7_12.sh
 
-source venv1/bin/activate # Change venv6 to your python virtual environment (which should be in the working directory)
+source venv2712/bin/activate # Change venv6 to your python virtual environment (which should be in the working directory)
 
 module load cuda/9.0
 
-python3 train.py --data_dir ~/deepImmune/datasets_list.txt --model_dir /home/as892/data/xiaoman --prefix tcga
+python train.py --data_dir ~/deepImmune/datasets_list.txt --model_dir ~/xiaoman --prefix tcga
 
 deactivate

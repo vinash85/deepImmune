@@ -25,6 +25,8 @@ wheels/
 *.egg
 MANIFEST
 venv1/
+venv2712/
+venv*/
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -110,6 +112,9 @@ venv.bak/
 # model file 
 
 *.tar
+
+#run files 
+host*
 
 
 experiments/
