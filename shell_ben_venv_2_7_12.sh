@@ -16,5 +16,6 @@ pip install -U numpy
 pip install -r requirements_2_7_12.txt
 pip install --no-cache-dir torch
 pip install --no-cache-dir torchvision
+pip install --no-cache-dir tensorboardX
 
 deactivate

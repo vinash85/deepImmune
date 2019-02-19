@@ -10,7 +10,7 @@ import torch.nn as nn
 # import datetime
 # import time
 
-
+import datetime
 import argparse
 import logging
 import os
@@ -25,6 +25,8 @@ import model.net as net
 # import model.data_loader as data_loader
 import model.data_generator as data_generator
 from evaluate import evaluate
+
+from tensorboardX import SummaryWriter 
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--embedding_size', default=32,
@@ -43,6 +45,7 @@ parser.add_argument('--prefix', default='',
 parser.add_argument('--restore_file', default=None,
                     help="Optional, name of the file in --model_dir containing weights to reload before \
                     training")  # 'best' or 'train'
+parser.add_argument('--logging_dir', default=None, help="Optional, where you want to log Tensorboard too")
 
 # Device configuration
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
@@ -175,7 +178,7 @@ def train(embedding_model, outputs, embedding_optimizer, outputs_optimizer, data
     metrics_string = " ; ".join("{}: {:05.3f}".format(k, v)
                                 for k, v in metrics_mean.items())
     logging.info("- Train metrics: " + metrics_string)
-
+    return(metrics_mean)
 
 def train_and_evaluate(embedding_model, outputs, datasets, embedding_optimizer, outputs_optimizer, metrics, params, model_dir,
                        restore_file=None):
@@ -199,18 +202,27 @@ def train_and_evaluate(embedding_model, outputs, datasets, embedding_optimizer, 
         utils.load_checkpoint(restore_path, model, optimizer)
 
     best_val_acc = 0.5  # for cindex
+    
 
+     
     for epoch in range(params.num_epochs):
         # Run one epoch
         logging.info("Epoch {}/{}".format(epoch + 1, params.num_epochs))
-
+        
+        train_metrics_all = []
         # compute number of batches in one epoch (one full pass over the training set)
         for dataloader in datasets:
-            train(embedding_model, outputs, embedding_optimizer,
+            train_metric = train(embedding_model, outputs, embedding_optimizer,
                   outputs_optimizer, dataloader['train'], metrics, params)
-
+            train_metrics_all.append(train_metric)
         # Evaluate for one epoch on validation set
         val_metrics_all = [evaluate(embedding_model, outputs, dataloader['val'], metrics, params)for dataloader in datasets]
+        
+        #write info out to tensorboard 
+        for i in range(len(datasets)):
+            writer.add_scalars('train_'+str(i), train_metrics_all[i], epoch)
+            writer.add_scalars('val_'+str(i), val_metrics_all[i], epoch)
+        
         # val_metrics = []
         val_metrics = {metric: eval(params.metrics)([x[metric] for x in val_metrics_all]) for metric in val_metrics_all[0]}
 
@@ -273,6 +285,9 @@ if __name__ == '__main__':
     # Set the logger
     
     utils.set_logger(os.path.join(os.getcwd(), 'train.log'))
+    
+    # Set the tensorboard writer     
+    writer = SummaryWriter(os.path.join(args.model_dir, 'tensorboardLog', datetime.datetime.now().strftime("%Y%m%d-%H%M%S")))
 
     # Create the input data pipeline
     logging.info("Loading the datasets...")
