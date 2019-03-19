@@ -358,7 +358,7 @@ if __name__ == '__main__':
     for i in range(args.num_trials):
         setup_and_train(args)
         print("Summary of run {}/{}:".format(i + 1, args.num_trials))
-        pprint(bb.get_current_run())
+        print(bb.get_current_run())
         print()
 
     print("\nSummary of best run:")
