@@ -25,6 +25,9 @@ from evaluate import evaluate
 
 from tensorboardX import SummaryWriter
 
+from bbopt import BlackBoxOptimizer
+bb = BlackBoxOptimizer(file=__file__)
+
 parser = argparse.ArgumentParser()
 parser.add_argument('--embedding_size', default=32,
                     help="Size of immune embedding (default:8)")
@@ -43,6 +46,13 @@ parser.add_argument('--restore_file', default=None,
                     help="Optional, name of the file in --model_dir containing weights to reload before \
                     training")  # 'best' or 'train'
 parser.add_argument('--logging_dir', default=None, help="Optional, where you want to log Tensorboard too")
+parser.add_argument(
+    "-n", "--num-trials",
+    metavar="trials",
+    type=int,
+    default=20,
+    help="number of trials to run (defaults to 20)",
+)
 
 # Device configuration
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
@@ -204,7 +214,7 @@ def train_and_evaluate(embedding_model, outputs, datasets, embedding_optimizer, 
         utils.load_checkpoint(restore_path, model, optimizer)
 
     best_val_acc = 0.5  # for cindex
-
+    best_val_metrics = None
     for epoch in range(params.num_epochs):
         # Run one epoch
         logging.info("Epoch {}/{}".format(epoch + 1, params.num_epochs))
@@ -229,7 +239,7 @@ def train_and_evaluate(embedding_model, outputs, datasets, embedding_optimizer, 
                        val_metrics_all[0]}
 
         # val_metrics = eval(params.metrics)(val_metrics)
-        val_acc = val_metrics['auc']  # use differnt functions
+        val_acc = val_metrics['c_index']  # use differnt functions
 
         is_best = val_acc > best_val_acc
 
@@ -247,7 +257,7 @@ def train_and_evaluate(embedding_model, outputs, datasets, embedding_optimizer, 
         if is_best:
             logging.info("- Found new best cindex")
             best_val_acc = val_acc
-
+            best_val_metrics = val_metrics
             # Save best val metrics in a json file in the model directory
             best_json_path = os.path.join(
                 model_dir, "metrics_val_best_weights.json")
@@ -257,9 +267,11 @@ def train_and_evaluate(embedding_model, outputs, datasets, embedding_optimizer, 
         last_json_path = os.path.join(
             model_dir, "metrics_val_last_weights.json")
         utils.save_dict_to_json(val_metrics, last_json_path)
-        # return the trained model
+        # return the trained model val statistics
+        return(best_val_metrics)
 
 def setup_and_train(args):
+    bb.run()
     json_path = os.path.join(args.model_dir, 'params.json')
     assert os.path.isfile(
         json_path), "No json configuration file found at {}".format(json_path)
@@ -319,11 +331,11 @@ def setup_and_train(args):
         # model = model.cuda()
         embedding_model = embedding_model.cuda()
         outputs = outputs.cuda()
-
+    lr = bb.loguniform("lr", 10e-4, 10e-2)
     embedding_optimizer = optim.Adam(
-        embedding_model.parameters(), lr=params.learning_rate, weight_decay=1e-3)
+        embedding_model.parameters(), lr=lr, weight_decay=1e-3)
     outputs_optimizer = optim.Adam(
-        outputs.parameters(), lr=params.learning_rate, weight_decay=1e-3)
+        outputs.parameters(), lr=lr, weight_decay=1e-3)
 
     # fetch loss function and metrics
     # loss_fn = net.negative_log_partial_likelihood
@@ -331,12 +343,24 @@ def setup_and_train(args):
 
     # Train the model
     logging.info("Starting training for {} epoch(s)".format(params.num_epochs))
-    train_and_evaluate(embedding_model, outputs, datasets, embedding_optimizer, outputs_optimizer, metrics, params,
+    val_metrics = train_and_evaluate(embedding_model, outputs, datasets, embedding_optimizer, outputs_optimizer, metrics, params,
                        args.model_dir, args.restore_file)
+
+    bb.remember(val_metrics)
+    bb.maximize(val_metrics['c_index'])
+
+
 
 
 if __name__ == '__main__':
 
     # Load the parameters from json file
     args = parser.parse_args()
-    setup_and_train(args)
+    for i in range(args.num_trials):
+        setup_and_train(args)
+        print("Summary of run {}/{}:".format(i + 1, args.num_trials))
+        pprint(bb.get_current_run())
+        print()
+
+    print("\nSummary of best run:")
+    pprint(bb.get_optimal_run())
