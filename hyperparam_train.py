@@ -26,7 +26,7 @@ from evaluate import evaluate
 from tensorboardX import SummaryWriter
 
 from bbopt import BlackBoxOptimizer
-bb = BlackBoxOptimizer(file=__file__)
+bb = BlackBoxOptimizer(file=__file__, protocol='json')
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--embedding_size', default=32,
@@ -185,7 +185,7 @@ def train(embedding_model, outputs, embedding_optimizer, outputs_optimizer, data
 
 def train_and_evaluate(embedding_model, outputs, datasets, embedding_optimizer, outputs_optimizer, metrics, params,
                        model_dir,
-                       restore_file=None):
+                       restore_file=None, writer=None):
     """Train the model and evaluate every epoch.
     Args:
         model: (torch.nn.Module) the neural network
@@ -222,9 +222,10 @@ def train_and_evaluate(embedding_model, outputs, datasets, embedding_optimizer, 
                            datasets]
 
         # write info out to tensorboard
-        # for i in range(len(datasets)):
-        #     writer.add_scalars('train_' + str(i), train_metrics_all[i], epoch)
-        #     writer.add_scalars('val_' + str(i), val_metrics_all[i], epoch)
+        if writer is not None:
+            for i in range(len(datasets)):
+                writer.add_scalars('train_' + str(i), train_metrics_all[i], epoch)
+                writer.add_scalars('val_' + str(i), val_metrics_all[i], epoch)
 
         # val_metrics = []
         val_metrics = {metric: eval(params.metrics)([x[metric] for x in val_metrics_all]) for metric in
@@ -263,7 +264,7 @@ def train_and_evaluate(embedding_model, outputs, datasets, embedding_optimizer, 
     return(best_val_metrics)
 
 def setup_and_train(args):
-    bb.run()
+    bb.run(alg="tree_structured_parzen_estimator")
     json_path = os.path.join(args.model_dir, 'params.json')
     assert os.path.isfile(
         json_path), "No json configuration file found at {}".format(json_path)
@@ -289,8 +290,8 @@ def setup_and_train(args):
     utils.set_logger(os.path.join(os.getcwd(), 'train.log'))
 
     # Set the tensorboard writer
-    #writer = SummaryWriter(
-    #   os.path.join(args.model_dir, 'tensorboardLog', datetime.datetime.now().strftime("%Y%m%d-%H%M%S")))
+    writer = SummaryWriter(
+      os.path.join(args.model_dir, 'tensorboardLog', datetime.datetime.now().strftime("%Y%m%d-%H%M%S")))
 
     # Create the input data pipeline
     logging.info("Loading the datasets...")
@@ -336,7 +337,7 @@ def setup_and_train(args):
     # Train the model
     logging.info("Starting training for {} epoch(s)".format(params.num_epochs))
     val_metrics = train_and_evaluate(embedding_model, outputs, datasets, embedding_optimizer, outputs_optimizer, metrics, params,
-                       args.model_dir, args.restore_file)
+                       args.model_dir, args.restore_file, writer)
 
     bb.remember(val_metrics)
     bb.maximize(val_metrics['c_index'])
