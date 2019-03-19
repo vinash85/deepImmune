@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH -c 2                               # 1 core
-#SBATCH -t 0-00:10                         # Runtime of 5 minutes, in D-HH:MM format
+#SBATCH -t 0-02:10                         # Runtime of 5 minutes, in D-HH:MM format
 #SBATCH -p short                           # Run in short partition
 #SBATCH -o hostname_%j.out                 # File to which STDOUT + STDERR will be written, including job ID in filename
 #SBATCH --mail-type=ALL                    # ALL email notification type

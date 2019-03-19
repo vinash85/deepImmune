@@ -1,6 +1,3 @@
-"""Train the model"""
-
-
 import torch
 import torch.nn as nn
 # import torchvision
@@ -181,7 +178,7 @@ def train(embedding_model, outputs, embedding_optimizer, outputs_optimizer, data
     return(metrics_mean)
 
 def train_and_evaluate(embedding_model, outputs, datasets, embedding_optimizer, outputs_optimizer, metrics, params, model_dir,
-                       restore_file=None, reporter=None):
+                       restore_file=None):
     """Train the model and evaluate every epoch.
     Args:
         model: (torch.nn.Module) the neural network
@@ -255,16 +252,17 @@ def train_and_evaluate(embedding_model, outputs, datasets, embedding_optimizer, 
         last_json_path = os.path.join(
             model_dir, "metrics_val_last_weights.json")
         utils.save_dict_to_json(val_metrics, last_json_path)
-        if reporter is not None: 
-            reporter(c_index=val_metrics['c_index'], done=(epoch==(params.num_epochs-1)))
         # return the trained model
 
-def setup_and_train(args, config=None, reporter=None):
+
+if __name__ == '__main__':
+
+    # Load the parameters from json file
+    args = parser.parse_args()
     json_path = os.path.join(args.model_dir, 'params.json')
     assert os.path.isfile(
         json_path), "No json configuration file found at {}".format(json_path)
     params = utils.Params(json_path)
-    vars(params).update(config)
     if params.loss_fns == 0:
         params.loss_fns = [net.negative_log_partial_likelihood_loss] + [nn.MSELoss()] * (
             params.linear_output_size - 1) + [nn.BCEWithLogitsLoss()] * (params.binary_output_size)
@@ -329,14 +327,4 @@ def setup_and_train(args, config=None, reporter=None):
 
     # Train the model
     logging.info("Starting training for {} epoch(s)".format(params.num_epochs))
-    train_and_evaluate(embedding_model, outputs, datasets, embedding_optimizer, outputs_optimizer, metrics, params, args.model_dir,
-                       args.restore_file, reporter)
-    
-
-
-if __name__ == '__main__':
-
-    # Load the parameters from json file
-    args = parser.parse_args()
-    setup_and_train(args)
-    
+    train_and_evaluate(embedding_model, outputs, datasets, embedding_optimizer, outputs_optimizer, metrics, params, args.model_dir, args.restore_file)
