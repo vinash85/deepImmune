@@ -260,7 +260,7 @@ def train_and_evaluate(embedding_model, outputs, datasets, embedding_optimizer, 
             model_dir, "metrics_val_last_weights.json")
         utils.save_dict_to_json(val_metrics, last_json_path)
         # return the trained model val statistics
-        return(best_val_metrics)
+    return(best_val_metrics)
 
 def setup_and_train(args):
     bb.run()
