@@ -229,9 +229,9 @@ def train_and_evaluate(embedding_model, outputs, datasets, embedding_optimizer, 
                            datasets]
 
         # write info out to tensorboard
-        for i in range(len(datasets)):
-            writer.add_scalars('train_' + str(i), train_metrics_all[i], epoch)
-            writer.add_scalars('val_' + str(i), val_metrics_all[i], epoch)
+        # for i in range(len(datasets)):
+        #     writer.add_scalars('train_' + str(i), train_metrics_all[i], epoch)
+        #     writer.add_scalars('val_' + str(i), val_metrics_all[i], epoch)
 
         # val_metrics = []
         val_metrics = {metric: eval(params.metrics)([x[metric] for x in val_metrics_all]) for metric in
@@ -296,8 +296,8 @@ def setup_and_train(args):
     utils.set_logger(os.path.join(os.getcwd(), 'train.log'))
 
     # Set the tensorboard writer
-    writer = SummaryWriter(
-        os.path.join(args.model_dir, 'tensorboardLog', datetime.datetime.now().strftime("%Y%m%d-%H%M%S")))
+    #writer = SummaryWriter(
+    #   os.path.join(args.model_dir, 'tensorboardLog', datetime.datetime.now().strftime("%Y%m%d-%H%M%S")))
 
     # Create the input data pipeline
     logging.info("Loading the datasets...")
