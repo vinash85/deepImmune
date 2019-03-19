@@ -31,13 +31,13 @@ bb = BlackBoxOptimizer(file=__file__)
 parser = argparse.ArgumentParser()
 parser.add_argument('--embedding_size', default=32,
                     help="Size of immune embedding (default:8)")
-parser.add_argument('--data_dir', default='data/64x64_SIGNS',
+parser.add_argument('--data_dir', default='/home/bk117/deepImmune/datasets_list.txt',
                     help="File containing directory containing datasets")
 # parser.add_argument('--data_dir_list', default=None,
 # help="File contating list of dataset directories data_dirs")
-parser.add_argument('--model_dir', default='experiments/base_model',
+parser.add_argument('--model_dir', default='/home/bk117/xiaoman',
                     help="Directory containing params.json")
-parser.add_argument('--prefix', default='',
+parser.add_argument('--prefix', default='tcga',
                     help="Prefix of dataset files  \n \
                     (e.g. prefix=\"tcga\" implies input files are \n \
                     tcga_ssgsea_[train,test,val].txt, \n \
@@ -45,7 +45,6 @@ parser.add_argument('--prefix', default='',
 parser.add_argument('--restore_file', default=None,
                     help="Optional, name of the file in --model_dir containing weights to reload before \
                     training")  # 'best' or 'train'
-parser.add_argument('--logging_dir', default=None, help="Optional, where you want to log Tensorboard too")
 parser.add_argument(
     "-n", "--num-trials",
     metavar="trials",
