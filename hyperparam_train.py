@@ -45,13 +45,6 @@ parser.add_argument('--prefix', default='tcga',
 parser.add_argument('--restore_file', default=None,
                     help="Optional, name of the file in --model_dir containing weights to reload before \
                     training")  # 'best' or 'train'
-parser.add_argument(
-    "-n", "--num-trials",
-    metavar="trials",
-    type=int,
-    default=20,
-    help="number of trials to run (defaults to 20)",
-)
 
 # Device configuration
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
@@ -355,11 +348,4 @@ if __name__ == '__main__':
 
     # Load the parameters from json file
     args = parser.parse_args()
-    for i in range(args.num_trials):
-        setup_and_train(args)
-        print("Summary of run {}/{}:".format(i + 1, args.num_trials))
-        print(bb.get_current_run())
-        print()
-
-    print("\nSummary of best run:")
-    pprint(bb.get_optimal_run())
+    setup_and_train(args)
