@@ -2,7 +2,11 @@
 title: "R Notebook"
 output: html_notebook
 ---
-
+```{r}
+dataset.col.curr = fread("/homes6/asahu/liulab_home/projects/icb/data/tcga/scrna.v4.genes/skcm/dataset.txt", nrow=1)
+if.start.inx = which(colnames(dataset.col.curr)== "B_cells_naive")
+genes.analyzed = colnames(dataset.col.curr)[seq(2,if.start.inx)] %>% gsub("\\.", ., replacement="")
+```
 ## Read differential expressed genes
 ```{r}
 aa = fread("/liulab/xmwang/oxphos_proj/loading_data/cistrome/differential expression of genes in all datasets.txt")
@@ -29,7 +33,8 @@ all.mat = rbind(rbind(tfko.mat,chemo.mat),targeted.mat)
 
 setcolorder(all.mat, c("Sample_ID", genes.analyzed))
 
-write.table(file = "/homes6/asahu/liulab_home/data/ssgsea/xiaoman/wubin/combined.drug.log2fc.txt", x = all.mat, quote = F, sep = "\t", row.names = F, col.names = T)
+# write.table(file = "/homes6/asahu/liulab_home/data/ssgsea/xiaoman/wubin/combined.drug.log2fc.txt", x = all.mat, quote = F, sep = "\t", row.names = F, col.names = T)
+write.table(file = "/homes6/asahu/liulab_home/projects/icb/data/tcga/scrna.v4.genes/skcm/combined.drug.log2fc.txt", x = all.mat, quote = F, sep = "\t", row.names = F, col.names = T)
 
 ```
 ## write a directory for xin 
