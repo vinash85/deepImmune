@@ -4,7 +4,7 @@ output: html_notebook
 ---
 
 
-## expression association 
+## expression association
 
 
 
@@ -103,7 +103,7 @@ tcga.immune.genes = expression_match[,immune.genes]
 
 ```
 
-### immune factors 
+### immune factors
 
 ```{r}
 immune.factors = tcga.dataset[,c(66:96, 100:137), with=F]
@@ -182,7 +182,7 @@ rrpa.topmost.cors = unique(unlist(topmost.cors.genes))
 rrpa.top.cors = unique(unlist(top.cors))
 ```
 
-## Mutation data(Havel et al. 2019) : 
+## Mutation data(Havel et al. 2019) :
 
 STK11, B2M, PTEN, PTPN2, APLNR, SWI/SNF (PBAF)
 ```{r}
@@ -279,7 +279,7 @@ save(file="~/project/deeplearning/icb/data/tcga/scrna.v4.pcs/ref.expression.norm
 # ww1 = cumsum(ww/sum(ww))
 
 ```
-## Create dataset and write dataset files 
+## Create dataset and write dataset files
 ```{r}
 
 top.pcs = top.gene.pcs$x[,1:50]
@@ -306,7 +306,7 @@ output.dir = "~/project/deeplearning/icb/data/tcga/scrna.v4.pcs/"
 write.dataset(output.dir = output.dir, dataset = dataset.new, sample.name = sample.name)
 
 ```
-### Genes instead of top pcs 
+### Genes instead of top pcs
 
 ```{r}
 tcga.cols = colnames(tcga.dataset)
@@ -344,7 +344,7 @@ file.copy("~/project/deeplearning/icb/data/tcga/scrna.v4.pcs/datasets_tsne_list.
 
 ```
 
-## All genes no pcs 
+## All genes no pcs
 Is PC is helping? Are large number of outputs are sufficient to learn large number of parameters? 
 
 ```{r}
@@ -379,7 +379,7 @@ file.copy("~/project/deeplearning/icb/data/tcga/scrna.v4.genes/datasets_tsne_lis
 
 
 ```
-##  Nir's data processing
+## Nir's data processing
 * PC
 * pc.sel
 * gene.expression
@@ -521,7 +521,7 @@ pca_obj.RData = "~/project/deeplearning/icb/data/tcga/scrna.v1//pca_obj.RData"
 
 
 
-##  Expression inputs
+## Expression inputs
 ```{r}
 
 dataset_ssgsea_sel.norm = normalize.expression(dataset_ssgsea_sel, num.samp.thr = 0) 
@@ -547,7 +547,7 @@ file.copy("~/project/deeplearning/icb/data/tcga/scrna.v4.pcs/datasets_tsne_list.
 # save.image("~/project/deeplearning/icb/results/sessions/process.dataset.imputation.tcga.v2.today.RData")
 ```
 
-## All expression inputs 
+## All expression inputs
 ```{r}
 
 extra.genes.inx = c("TGFB1", "TGFBR2", "KLRC1")
