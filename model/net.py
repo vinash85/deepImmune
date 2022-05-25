@@ -215,7 +215,7 @@ class EmbeddingNet(nn.Module):
     def forward(self, x):
         out = self.basicLayers(x)
         # tracer()
-        out = self.norm(out)
+        # out = self.norm(out)
         out = self.fc3(out)
         return out
 
@@ -242,7 +242,8 @@ class outputLayer(nn.Module):
 
     def forward(self, x):
         # tracer()
-        out = self.internal_layers(x)
+        out = F.relu(x)
+        out = self.internal_layers(out)
         surv_out = out[:, :self.survival_len]
         if self.survival_len > 0:
             surv_out = self.dense1_bn(surv_out)
